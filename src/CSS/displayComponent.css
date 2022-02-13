@@ -1,0 +1,39 @@
+.tableButton {
+  width: 70px;
+  height: 30px;
+  background-color: lawngreen;
+  border-radius: 15px;
+}
+.tdButtons {
+  justify-content: space-around;
+}
+h1 {
+  justify-self: center;
+  align-self: center;
+}
+table,
+tr td,
+tr th {
+  border: 1px solid black;
+}
+tbody {
+  display: block;
+  height: 85%;
+  overflow: auto;
+}
+thead,
+tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed; /* even columns width , fix width of table too*/
+}
+thead {
+  width: calc(
+    100% - 1.3em
+  ); /* scrollbar is average 1em/16px width, remove it from thead width */
+  height: 15%;
+}
+table {
+  width: 100%;
+  height: 100%;
+}
