@@ -1,10 +1,13 @@
 .bgContainer {
-  height: 300px;
-  width: 650px;
+  height: 250px;
+  width: 50%;
   background: gray;
   justify-self: center;
+  align-self: flex-start;
   display: inline-grid;
   justify-content: inherit;
+  overflow-y: auto;
+  overflow-x: auto;
 }
 .inputContainer {
   height: 20%;
@@ -12,4 +15,8 @@
   justify-self: center;
   margin-top: 7px;
   background-color: red;
+}
+#form {
+  display: grid;
+  grid-template-rows: 25% 25% 25% 25%;
 }

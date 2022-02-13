@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../../src/App.css";
+import "../CSS/App.css";
 import DisplayComponent from "./displayComponent";
 import FormComponent from "./formComponent";
 function App() {
@@ -39,6 +39,7 @@ function App() {
   }
   return (
     <>
+      <h1>!!! Employee Management System !!!</h1>
       <div id="form" className="bgContainer">
         <FormComponent
           employees={employees}

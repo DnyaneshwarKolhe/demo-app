@@ -3,23 +3,24 @@
   width: 100%;
   height: 100%;
   justify-content: space-around;
+  align-items: center;
 }
 .labels {
   width: 50%;
   height: 100%;
-  font-size: 25px;
-  align-items: flex-start;
-  justify-content: space-evenly;
+  font-size: 20px;
+  color: white;
   display: flex;
-  margin-top: 5px;
-  margin-left: 30px;
+  align-items: center;
+  justify-content: center;
 }
+
 .input-container {
   width: 50%;
-  height: 80px;
+  height: 100%;
   display: grid;
-  margin-left: 5px;
-  margin-right: 15px;
+  align-items: center;
+  grid-template-rows: 75% 25%;
 }
 .formButton {
   width: 100px;
@@ -29,5 +30,13 @@
   border-radius: 15px;
 }
 input {
-  height: 35px;
+  height: 25px;
+  width: 90%;
+  align-self: flex-end;
+  font-family: "Times New Roman", Times, serif;
+  border: none;
+}
+.warning-text {
+  font-size: 10px;
+  color: red;
 }
