@@ -47,13 +47,13 @@ function FormComponent(props) {
     //setting values by getting input element id
     switch (e.target.id) {
       case "employee_id":
-        setEmployeeId(e.target.value.trim());
+        e.target.value.trim() ? setEmployeeId(e.target.value) : setEmployeeId(e.target.value.trim());
         break;
       case "employee_name":
-        setEmployeeName(e.target.value.trim());
+        e.target.value.trim() ? setEmployeeName(e.target.value) : setEmployeeName(e.target.value.trim());
         break;
       case "employee_salary":
-        setEmployeeSal(e.target.value.trim());
+        e.target.value.trim() ? setEmployeeSal(e.target.value) : setEmployeeSal(e.target.value.trim());
         break;
     }
   }
