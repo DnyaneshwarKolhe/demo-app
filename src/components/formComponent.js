@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import { Button } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import "../CSS/formComponent.css";
 
 function FormComponent(props) {
-  const [displayWarning, setDisplayWarning] = useState(false);
-  const [editMode, setEditMode] = useState(true);
   const [empId, setEmployeeId] = useState("");
   const [empName, setEmployeeName] = useState("");
   const [empSal, setEmployeeSal] = useState("");
+  const [empIdErrMsg, setEmployeeIdErrMsg] = useState("");
+  const [empNameErrMsg, setEmployeeNameErrMsg] = useState("");
+  const [empSalErrMsg, setEmployeeSalErrMsg] = useState("");
   function addEmployee(e) {
     let isEmployeeExist = true;
     //checking if employee already exists
@@ -14,20 +16,20 @@ function FormComponent(props) {
       if ((!props.editEmployeeId) || (props.editEmployeeId != empId)) {
         setEmployeeId("");
         isEmployeeExist = false;
-        alert(`Employee with id ${empId} already exist`);
+        setEmployeeIdErrMsg(`Employee with id ${empId} already exist`);
       }
     }
     //Validating that all fields should contains values
     if (!(empId && empName && empSal && isEmployeeExist)) {
-      setDisplayWarning(true);
+      if (!empId) setEmployeeIdErrMsg("*Required");
+      if (!empName) setEmployeeNameErrMsg("*Required");
+      if (!empSal) setEmployeeSalErrMsg("*Required");
     } else {
       props.onSubmit(
         { employee_id: empId, employee_name: empName, employee_salary: empSal },
         props.editEmployeeId
       );
-      setDisplayWarning(false);
       if (props.editEmployeeId) {
-        setEditMode(true);
         props.setEditEmpId(null);
       }
       setEmployeeId("");
@@ -35,25 +37,50 @@ function FormComponent(props) {
       setEmployeeSal("");
     }
   }
-  //setting state values on input box change
-  function setAttrOnChange(e) {
-    //setting state if mode of operation is Edit
-    if (props.editEmployeeId && editMode) {
+  useEffect(() => {
+    if (props.editEmployeeId) {
       setEmployeeId(props.employees[props.editEmployeeId].employee_id);
       setEmployeeName(props.employees[props.editEmployeeId].employee_name);
       setEmployeeSal(props.employees[props.editEmployeeId].employee_salary);
-      setEditMode(false);
     }
-    //setting values by getting input element id
+  }, [props.editEmployeeId]);
+  useEffect(() => {
+    if (!(empId || empName || empSal)) {
+      setEmployeeIdErrMsg(null);
+      setEmployeeNameErrMsg(null);
+      setEmployeeSalErrMsg(null);
+      props.setEditEmpId(null);
+    }
+  }, [empId, empName, empSal]);
+  //setting state values on input box change
+  function setAttrOnChange(e) {
     switch (e.target.id) {
       case "employee_id":
-        e.target.value.trim() ? setEmployeeId(e.target.value) : setEmployeeId(e.target.value.trim());
+        if (e.target.value.trim()) {
+          setEmployeeId(e.target.value);
+          setEmployeeIdErrMsg(null);
+        } else {
+          setEmployeeId(e.target.value.trim());
+          setEmployeeIdErrMsg("*Required");
+        }
         break;
       case "employee_name":
-        e.target.value.trim() ? setEmployeeName(e.target.value) : setEmployeeName(e.target.value.trim());
+        if (e.target.value.trim()) {
+          setEmployeeName(e.target.value)
+          setEmployeeNameErrMsg(null);
+        } else {
+          setEmployeeName(e.target.value.trim())
+          setEmployeeNameErrMsg("*Required");
+        };
         break;
       case "employee_salary":
-        e.target.value.trim() ? setEmployeeSal(e.target.value) : setEmployeeSal(e.target.value.trim());
+        if (e.target.value.trim()) {
+          setEmployeeSal(e.target.value)
+          setEmployeeSalErrMsg(null);
+        } else {
+          setEmployeeSal(e.target.value.trim())
+          setEmployeeSalErrMsg("*Required");
+        };
         break;
     }
   }
@@ -62,7 +89,9 @@ function FormComponent(props) {
     setEmployeeId("");
     setEmployeeName("");
     setEmployeeSal("");
-    setDisplayWarning(false);
+    setEmployeeIdErrMsg(null);
+    setEmployeeNameErrMsg(null);
+    setEmployeeSalErrMsg(null);
     props.setEditEmpId(null);
   }
   return (
@@ -71,75 +100,33 @@ function FormComponent(props) {
         <label className="labels">Employee ID:</label>
         <div className="input-container">
           <input
-            id="employee_id"
-            className="inputBox"
-            onChange={setAttrOnChange}
-            value={
-              props.editEmployeeId && editMode
-                ? props.employees[props.editEmployeeId].employee_id
-                : empId
-            }
-            placeholder="Enter Employee ID"
-            style={{ border: !empId && displayWarning ? '2px solid red' : 'none' }}
+            id="employee_id" className="inputBox" onChange={setAttrOnChange} value={empId} placeholder="Enter Employee ID" style={{ border: !empId && empIdErrMsg ? '2px solid red' : 'none' }}
           ></input>
-          <label
-            id="employee_id"
-            className="warning-text"
-            style={{ display: !empId && displayWarning ? "block" : "none" }}
-          >
-            *Required
+          <label id="employee_id" className="warning-text">
+            {empIdErrMsg}
           </label>
         </div>
       </div>
       <div className="row">
         <label className="labels">Employee Name:</label>
         <div className="input-container">
-          <input
-            id="employee_name"
-            className="inputBox"
-            onChange={setAttrOnChange}
-            value={
-              props.editEmployeeId && editMode
-                ? props.employees[props.editEmployeeId].employee_name
-                : empName
-            }
-            placeholder="Enter Employee Name"
-            style={{ border: !empName && displayWarning ? '2px solid red' : 'none' }}
-          ></input>
-          <label
-            id="employee_name"
-            className="warning-text"
-            style={{ display: !empName && displayWarning ? "block" : "none" }}
-          >
-            *Required
+          <input id="employee_name" className="inputBox" onChange={setAttrOnChange} value={empName} placeholder="Enter Employee Name" style={{ border: !empName && empNameErrMsg ? '2px solid red' : 'none' }} />
+          <label id="employee_name" className="warning-text" >
+            {empNameErrMsg}
           </label>
         </div>
       </div>
       <div className="row">
         <label className="labels">Employee Salary: </label>
         <div className="input-container">
-          <input
-            id="employee_salary"
-            className="inputBox"
-            onChange={setAttrOnChange}
-            value={
-              props.editEmployeeId && editMode
-                ? props.employees[props.editEmployeeId].employee_salary
-                : empSal
-            }
-            placeholder="Enter Employee Salary"
-            style={{ border: !empSal && displayWarning ? '2px solid red' : 'none' }}
-          ></input>
-          <label
-            id="employee_salary"
-            className="warning-text"
-            style={{ display: !empSal && displayWarning ? "block" : "none" }}
-          >
-            *Required
+          <input id="employee_salary" className="inputBox" onChange={setAttrOnChange} value={empSal} placeholder="Enter Employee Salary" style={{ border: !empSal && empSalErrMsg ? '2px solid red' : 'none' }} />
+          <label id="employee_salary" className="warning-text">
+            {empSalErrMsg}
           </label>
         </div>
       </div>
       <div className="row">
+        <Button />
         <button className="formButton" onClick={addEmployee}>
           Submit
         </button>

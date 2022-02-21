@@ -16,18 +16,10 @@ function DisplayComponent(props) {
                 <td>{employee.employee_name}</td>
                 <td>{employee.employee_salary}</td>
                 <td className="tdButtons">
-                    <button
-                        id={employee.employee_id}
-                        className="tableButton"
-                        onClick={onEdit}
-                    >
+                    <button id={employee.employee_id} className="tableButton" onClick={onEdit} >
                         EDIT
                     </button>
-                    <button
-                        id={employee.employee_id}
-                        className="tableButton"
-                        onClick={onDelete}
-                    >
+                    <button id={employee.employee_id} className="tableButton" onClick={onDelete} >
                         DELETE
                     </button>
                 </td>

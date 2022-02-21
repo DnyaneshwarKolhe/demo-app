@@ -2,6 +2,13 @@ import { useState } from "react";
 import "../CSS/App.css";
 import DisplayComponent from "./displayComponent";
 import FormComponent from "./formComponent";
+
+import * as React from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+
 function App() {
   const [employees, manageEmployee] = useState({});
   const [editEmployeeId, setEditEmpId] = useState(null);
@@ -39,7 +46,15 @@ function App() {
   }
   return (
     <>
-      <h1>!!! Employee Management System !!!</h1>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              !!! Employee Management System !!!
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      </Box>
       <div id="form" className="bgContainer">
         <FormComponent
           employees={employees}
