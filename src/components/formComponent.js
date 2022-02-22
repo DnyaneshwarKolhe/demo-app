@@ -1,7 +1,6 @@
-import { Button } from "@mui/material";
+import { Box, Button, Grid, Stack, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import "../CSS/formComponent.css";
-
+// import "../CSS/formComponent.css";
 function FormComponent(props) {
   const [empId, setEmployeeId] = useState("");
   const [empName, setEmployeeName] = useState("");
@@ -95,46 +94,48 @@ function FormComponent(props) {
     props.setEditEmpId(null);
   }
   return (
-    <>
-      <div className="row">
-        <label className="labels">Employee ID:</label>
-        <div className="input-container">
-          <input
-            id="employee_id" className="inputBox" onChange={setAttrOnChange} value={empId} placeholder="Enter Employee ID" style={{ border: !empId && empIdErrMsg ? '2px solid red' : 'none' }}
-          ></input>
-          <label id="employee_id" className="warning-text">
-            {empIdErrMsg}
-          </label>
-        </div>
-      </div>
-      <div className="row">
-        <label className="labels">Employee Name:</label>
-        <div className="input-container">
-          <input id="employee_name" className="inputBox" onChange={setAttrOnChange} value={empName} placeholder="Enter Employee Name" style={{ border: !empName && empNameErrMsg ? '2px solid red' : 'none' }} />
-          <label id="employee_name" className="warning-text" >
-            {empNameErrMsg}
-          </label>
-        </div>
-      </div>
-      <div className="row">
-        <label className="labels">Employee Salary: </label>
-        <div className="input-container">
-          <input id="employee_salary" className="inputBox" onChange={setAttrOnChange} value={empSal} placeholder="Enter Employee Salary" style={{ border: !empSal && empSalErrMsg ? '2px solid red' : 'none' }} />
-          <label id="employee_salary" className="warning-text">
-            {empSalErrMsg}
-          </label>
-        </div>
-      </div>
-      <div className="row">
-        <Button />
-        <button className="formButton" onClick={addEmployee}>
-          Submit
-        </button>
-        <button className="formButton" onClick={resetForm}>
-          Reset
-        </button>
-      </div>
-    </>
+    <Grid container spacing={2} alignItems='center' justifyContent='center' margin={0}>
+      <Grid item xs={10}>
+        <TextField
+          id="employee_id"
+          label="Employee ID"
+          value={empId}
+          helperText={empIdErrMsg}
+          size='small'
+          onChange={setAttrOnChange}
+        />
+      </Grid>
+      <Grid item xs={10}>
+        <TextField
+          id="employee_name"
+          label="Employee Name"
+          value={empName}
+          helperText={empNameErrMsg}
+          size='small'
+          onChange={setAttrOnChange}
+        />
+      </Grid>
+      <Grid item xs={10}>
+        <TextField
+          id="employee_salary"
+          label="Employee Salary"
+          value={empSal}
+          helperText={empSalErrMsg}
+          size='small'
+          onChange={setAttrOnChange}
+        />
+      </Grid>
+      <Grid item xs={10}>
+        <Stack direction="row" spacing={2}>
+          <Button variant="contained" color="success" onClick={addEmployee}>
+            Submit
+          </Button>
+          <Button variant="outlined" color="error" onClick={resetForm}>
+            Reset
+          </Button>
+        </Stack>
+      </Grid>
+    </Grid>
   );
 }
 export default FormComponent;

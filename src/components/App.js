@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../CSS/App.css";
+// import "../CSS/App.css";
 import DisplayComponent from "./displayComponent";
 import FormComponent from "./formComponent";
 
@@ -8,6 +8,7 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import { Card, CardContent } from "@mui/material";
 
 function App() {
   const [employees, manageEmployee] = useState({});
@@ -55,22 +56,26 @@ function App() {
           </Toolbar>
         </AppBar>
       </Box>
-      <div id="form" className="bgContainer">
-        <FormComponent
-          employees={employees}
-          onSubmit={onSubmit}
-          setEditEmpId={editEmployee}
-          editEmployeeId={editEmployeeId}
-          deleteEmpOnEdit={deleteEmployee}
-        />
-      </div>
-      <div id="board" className="bgContainer">
-        <DisplayComponent
-          employees={employees}
-          onDelete={deleteEmployee}
-          onEdit={editEmployee}
-        />
-      </div>
+      <Card sx={{ minWidth: 275, maxWidth: 600 }}>
+        <CardContent>
+          <FormComponent
+            employees={employees}
+            onSubmit={onSubmit}
+            setEditEmpId={editEmployee}
+            editEmployeeId={editEmployeeId}
+            deleteEmpOnEdit={deleteEmployee}
+          />
+        </CardContent>
+      </Card>
+      <Card sx={{ minWidth: 275, maxWidth: 600, m: 2 }} justifyContent="center">
+        <CardContent>
+          <DisplayComponent
+            employees={employees}
+            onDelete={deleteEmployee}
+            onEdit={editEmployee}
+          />
+        </CardContent>
+      </Card>
     </>
   );
 }
