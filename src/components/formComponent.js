@@ -1,131 +1,122 @@
 import { Box, Button, Grid, Stack, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
-// import "../CSS/formComponent.css";
 function FormComponent(props) {
-  const [empId, setEmployeeId] = useState("");
-  const [empName, setEmployeeName] = useState("");
-  const [empSal, setEmployeeSal] = useState("");
-  const [empIdErrMsg, setEmployeeIdErrMsg] = useState("");
-  const [empNameErrMsg, setEmployeeNameErrMsg] = useState("");
-  const [empSalErrMsg, setEmployeeSalErrMsg] = useState("");
   function addEmployee(e) {
     let isEmployeeExist = true;
-    //checking if employee already exists
-    if (Object.keys(props.employees).find((element) => element == empId)) {
-      if ((!props.editEmployeeId) || (props.editEmployeeId != empId)) {
-        setEmployeeId("");
+    if (Object.keys(props.employees).find((element) => element == props.employee.id)) {
+      if ((!props.editEmployeeId) || (props.editEmployeeId != props.employee.id)) {
         isEmployeeExist = false;
-        setEmployeeIdErrMsg(`Employee with id ${empId} already exist`);
+        props.setErrorMsg({ ...props.errorMsg, id: `Employee with id ${props.employee.id} already exist` });
       }
     }
     //Validating that all fields should contains values
-    if (!(empId && empName && empSal && isEmployeeExist)) {
-      if (!empId) setEmployeeIdErrMsg("*Required");
-      if (!empName) setEmployeeNameErrMsg("*Required");
-      if (!empSal) setEmployeeSalErrMsg("*Required");
-    } else {
+    if (!(props.employee.id && props.employee.name && props.employee.salary)) {
+      let newErrorMsg = { id: '', name: '', salary: '' };
+      if (!props.employee.id) newErrorMsg.id = "*Required";
+      if (!props.employee.name) newErrorMsg.name = "*Required";
+      if (!props.employee.salary) newErrorMsg.salary = "*Required";
+      props.setErrorMsg(newErrorMsg);
+    } else if (isEmployeeExist) {
       props.onSubmit(
-        { employee_id: empId, employee_name: empName, employee_salary: empSal },
-        props.editEmployeeId
+        {
+          id: props.employee.id,
+          name: props.employee.name,
+          salary: props.employee.salary
+        }
       );
-      if (props.editEmployeeId) {
-        props.setEditEmpId(null);
-      }
-      setEmployeeId("");
-      setEmployeeName("");
-      setEmployeeSal("");
+      props.setEditEmpId(null);
+      props.setEmployee({ id: '', name: '', salary: '' });
     }
   }
   useEffect(() => {
     if (props.editEmployeeId) {
-      setEmployeeId(props.employees[props.editEmployeeId].employee_id);
-      setEmployeeName(props.employees[props.editEmployeeId].employee_name);
-      setEmployeeSal(props.employees[props.editEmployeeId].employee_salary);
+      props.setEmployee({
+        id: props.employees[props.editEmployeeId].id,
+        name: props.employees[props.editEmployeeId].name,
+        salary: props.employees[props.editEmployeeId].salary
+      });
     }
   }, [props.editEmployeeId]);
   useEffect(() => {
-    if (!(empId || empName || empSal)) {
-      setEmployeeIdErrMsg(null);
-      setEmployeeNameErrMsg(null);
-      setEmployeeSalErrMsg(null);
+    if (!(props.employee.id || props.employee.name || props.employee.salary)) {
+      props.setErrorMsg({ id: '', name: '', salary: '' });
       props.setEditEmpId(null);
     }
-  }, [empId, empName, empSal]);
+  }, [props.employee.id, props.employee.name, props.employee.salary]);
   //setting state values on input box change
   function setAttrOnChange(e) {
     switch (e.target.id) {
-      case "employee_id":
+      case "id":
         if (e.target.value.trim()) {
-          setEmployeeId(e.target.value);
-          setEmployeeIdErrMsg(null);
+          props.setEmployee({ ...props.employee, id: e.target.value });
+          props.setErrorMsg({ ...props.errorMsg, id: '' });
         } else {
-          setEmployeeId(e.target.value.trim());
-          setEmployeeIdErrMsg("*Required");
+          props.setEmployee({ ...props.employee, id: e.target.value.trim() });
+          props.setErrorMsg({ ...props.errorMsg, id: '*Required' });
         }
         break;
-      case "employee_name":
+      case "name":
         if (e.target.value.trim()) {
-          setEmployeeName(e.target.value)
-          setEmployeeNameErrMsg(null);
+          props.setEmployee({ ...props.employee, name: e.target.value });
+          props.setErrorMsg({ ...props.errorMsg, name: '' });
         } else {
-          setEmployeeName(e.target.value.trim())
-          setEmployeeNameErrMsg("*Required");
-        };
+          props.setEmployee({ ...props.employee, name: e.target.value.trim() });
+          props.setErrorMsg({ ...props.errorMsg, name: '*Required' });
+        }
         break;
-      case "employee_salary":
+      case "salary":
         if (e.target.value.trim()) {
-          setEmployeeSal(e.target.value)
-          setEmployeeSalErrMsg(null);
+          props.setEmployee({ ...props.employee, salary: e.target.value });
+          props.setErrorMsg({ ...props.errorMsg, salary: '' });
         } else {
-          setEmployeeSal(e.target.value.trim())
-          setEmployeeSalErrMsg("*Required");
+          props.setEmployee({ ...props.employee, salary: e.target.value.trim() });
+          props.setErrorMsg({ ...props.errorMsg, salary: '*Required' });
         };
         break;
     }
   }
   //clearing form on reset
   function resetForm() {
-    setEmployeeId("");
-    setEmployeeName("");
-    setEmployeeSal("");
-    setEmployeeIdErrMsg(null);
-    setEmployeeNameErrMsg(null);
-    setEmployeeSalErrMsg(null);
+    props.setEmployee({ id: '', name: '', salary: '' });
+    props.setErrorMsg({ id: '', name: '', salary: '' });
     props.setEditEmpId(null);
   }
   return (
-    <Grid container spacing={2} alignItems='center' justifyContent='center' margin={0}>
-      <Grid item xs={10}>
+    <Grid container margin={0}>
+      <Grid item xs={12} margin={1} display='flex' justifyContent='center'>
         <TextField
-          id="employee_id"
+          error={props.errorMsg.id ? true : null}
+          id="id"
           label="Employee ID"
-          value={empId}
-          helperText={empIdErrMsg}
+          value={props.employee.id}
+          helperText={props.errorMsg.id}
           size='small'
           onChange={setAttrOnChange}
         />
       </Grid>
-      <Grid item xs={10}>
+      <Grid item xs={12} margin={1} display='flex' justifyContent='center'>
         <TextField
-          id="employee_name"
+          error={props.errorMsg.name ? true : null}
+          id="name"
           label="Employee Name"
-          value={empName}
-          helperText={empNameErrMsg}
+          value={props.employee.name}
+          helperText={props.errorMsg.name}
           size='small'
           onChange={setAttrOnChange}
         />
       </Grid>
-      <Grid item xs={10}>
+      <Grid item xs={12} margin={1} display='flex' justifyContent='center'>
         <TextField
-          id="employee_salary"
+          error={props.errorMsg.salary ? true : null}
+          id="salary"
           label="Employee Salary"
-          value={empSal}
-          helperText={empSalErrMsg}
+          value={props.employee.salary}
+          helperText={props.errorMsg.salary}
           size='small'
           onChange={setAttrOnChange}
         />
       </Grid>
-      <Grid item xs={10}>
+      <Grid item xs={12} margin={1} display='flex' justifyContent='center'>
         <Stack direction="row" spacing={2}>
           <Button variant="contained" color="success" onClick={addEmployee}>
             Submit

@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import './CSS/index.css';
+import './CSS/index.css';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
+import BasicEditingGrid from './App.test';
 
 ReactDOM.render(
   <React.StrictMode>
