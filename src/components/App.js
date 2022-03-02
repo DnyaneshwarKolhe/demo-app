@@ -14,8 +14,8 @@ import { Card, CardContent, Paper } from "@mui/material";
 function App() {
   const [employees, manageEmployee] = useState({});
   const [editEmployeeId, setEditEmpId] = useState(null);
-  const [employee, setEmployee] = useState({ id: '', name: '', salary: '' });
-  const [errorMsg, setErrorMsg] = useState({ id: '', name: '', salary: '' });
+  const [employee, setEmployee] = useState({ id: '', name: '', salary: '', address1: '', address2: '', city: '', state: '', zip: '', mob_no: '' });
+  const [errorMsg, setErrorMsg] = useState({ id: '', name: '', salary: '', address1: '', address2: '', city: '', state: '', zip: '', mob_no: '' });
 
   function onSubmit(employee) {
     if (!editEmployeeId) {

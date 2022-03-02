@@ -11,21 +11,33 @@ function FormComponent(props) {
     }
     //Validating that all fields should contains values
     if (!(props.employee.id && props.employee.name && props.employee.salary)) {
-      let newErrorMsg = { id: '', name: '', salary: '' };
+      let newErrorMsg = { id: '', name: '', salary: '', address1: '', address2: '', city: '', state: '', zip: '', mob_no: '' };
       if (!props.employee.id) newErrorMsg.id = "*Required";
       if (!props.employee.name) newErrorMsg.name = "*Required";
       if (!props.employee.salary) newErrorMsg.salary = "*Required";
+      if (!props.employee.address1) newErrorMsg.address1 = "*Required";
+      if (!props.employee.address2) newErrorMsg.address2 = "*Required";
+      if (!props.employee.city) newErrorMsg.city = "*Required";
+      if (!props.employee.state) newErrorMsg.state = "*Required";
+      if (!props.employee.zip) newErrorMsg.zip = "*Required";
+      if (!props.employee.mob_no) newErrorMsg.mob_no = "*Required";
       props.setErrorMsg(newErrorMsg);
-    } else if (isEmployeeExist) {
+    } else { //if (isEmployeeExist) 
       props.onSubmit(
         {
           id: props.employee.id,
           name: props.employee.name,
-          salary: props.employee.salary
+          salary: props.employee.salary,
+          address1: props.employee.address1,
+          address2: props.employee.address2,
+          city: props.employee.city,
+          state: props.employee.state,
+          zip: props.employee.zip,
+          mob_no: props.employee.mob_no
         }
       );
       props.setEditEmpId(null);
-      props.setEmployee({ id: '', name: '', salary: '' });
+      props.setEmployee({ id: '', name: '', salary: '', address1: '', address2: '', city: '', state: '', zip: '', mob_no: '' });
     }
   }
   useEffect(() => {
@@ -33,13 +45,19 @@ function FormComponent(props) {
       props.setEmployee({
         id: props.employees[props.editEmployeeId].id,
         name: props.employees[props.editEmployeeId].name,
-        salary: props.employees[props.editEmployeeId].salary
+        salary: props.employees[props.editEmployeeId].salary,
+        address1: props.employees[props.editEmployeeId].address1,
+        address2: props.employees[props.editEmployeeId].address2,
+        city: props.employees[props.editEmployeeId].city,
+        state: props.employees[props.editEmployeeId].state,
+        zip: props.employees[props.editEmployeeId].zip,
+        mob_no: props.employees[props.editEmployeeId].mob_no
       });
     }
   }, [props.editEmployeeId]);
   useEffect(() => {
-    if (!(props.employee.id || props.employee.name || props.employee.salary)) {
-      props.setErrorMsg({ id: '', name: '', salary: '' });
+    if (!(props.employee.id || props.employee.name || props.employee.salary || props.employee.address1 || props.employee.address2 || props.employee.city || props.employee.state || props.employee.zip || props.employee.mob_no)) {
+      props.setErrorMsg({ id: '', name: '', salary: '', address1: '', address2: '', city: '', state: '', zip: '', mob_no: '' });
       props.setEditEmpId(null);
     }
   }, [props.employee.id, props.employee.name, props.employee.salary]);
@@ -73,17 +91,71 @@ function FormComponent(props) {
           props.setErrorMsg({ ...props.errorMsg, salary: '*Required' });
         };
         break;
+      case "address1":
+        if (e.target.value.trim()) {
+          props.setEmployee({ ...props.employee, address1: e.target.value });
+          props.setErrorMsg({ ...props.errorMsg, address1: '' });
+        } else {
+          props.setEmployee({ ...props.employee, address1: e.target.value.trim() });
+          props.setErrorMsg({ ...props.errorMsg, address1: '*Required' });
+        };
+        break;
+      case "address2":
+        if (e.target.value.trim()) {
+          props.setEmployee({ ...props.employee, address2: e.target.value });
+          props.setErrorMsg({ ...props.errorMsg, address2: '' });
+        } else {
+          props.setEmployee({ ...props.employee, address2: e.target.value.trim() });
+          props.setErrorMsg({ ...props.errorMsg, address2: '*Required' });
+        };
+        break;
+      case "city":
+        if (e.target.value.trim()) {
+          props.setEmployee({ ...props.employee, city: e.target.value });
+          props.setErrorMsg({ ...props.errorMsg, city: '' });
+        } else {
+          props.setEmployee({ ...props.employee, city: e.target.value.trim() });
+          props.setErrorMsg({ ...props.errorMsg, city: '*Required' });
+        };
+        break;
+      case "state":
+        if (e.target.value.trim()) {
+          props.setEmployee({ ...props.employee, state: e.target.value });
+          props.setErrorMsg({ ...props.errorMsg, state: '' });
+        } else {
+          props.setEmployee({ ...props.employee, state: e.target.value.trim() });
+          props.setErrorMsg({ ...props.errorMsg, state: '*Required' });
+        };
+        break;
+      case "zip":
+        if (e.target.value.trim()) {
+          props.setEmployee({ ...props.employee, zip: e.target.value });
+          props.setErrorMsg({ ...props.errorMsg, zip: '' });
+        } else {
+          props.setEmployee({ ...props.employee, zip: e.target.value.trim() });
+          props.setErrorMsg({ ...props.errorMsg, zip: '*Required' });
+        };
+        break;
+      case "mob_no":
+        if (e.target.value.trim()) {
+          props.setEmployee({ ...props.employee, mob_no: e.target.value });
+          props.setErrorMsg({ ...props.errorMsg, mob_no: '' });
+        } else {
+          props.setEmployee({ ...props.employee, mob_no: e.target.value.trim() });
+          props.setErrorMsg({ ...props.errorMsg, mob_no: '*Required' });
+        };
+        break;
     }
   }
   //clearing form on reset
   function resetForm() {
-    props.setEmployee({ id: '', name: '', salary: '' });
-    props.setErrorMsg({ id: '', name: '', salary: '' });
+    props.setEmployee({ id: '', name: '', salary: '', address1: '', address2: '', city: '', state: '', zip: '', mob_no: '' });
+    props.setErrorMsg({ id: '', name: '', salary: '', address1: '', address2: '', city: '', state: '', zip: '', mob_no: '' });
     props.setEditEmpId(null);
   }
   return (
     <Grid container margin={0}>
-      <Grid item xs={12} margin={1} display='flex' justifyContent='center'>
+      <Grid item xs={12} margin={1} display='flex' justifyContent='space-between'>
         <TextField
           error={props.errorMsg.id ? true : null}
           id="id"
@@ -93,8 +165,6 @@ function FormComponent(props) {
           size='small'
           onChange={setAttrOnChange}
         />
-      </Grid>
-      <Grid item xs={12} margin={1} display='flex' justifyContent='center'>
         <TextField
           error={props.errorMsg.name ? true : null}
           id="name"
@@ -112,6 +182,68 @@ function FormComponent(props) {
           label="Employee Salary"
           value={props.employee.salary}
           helperText={props.errorMsg.salary}
+          size='small'
+          onChange={setAttrOnChange}
+        />
+      </Grid>
+      <Grid item xs={12} margin={1} display='flex' justifyContent='space-between'>
+        <TextField
+          error={props.errorMsg.address1 ? true : null}
+          id="address1"
+          label="Address Line1"
+          value={props.employee.address1}
+          helperText={props.errorMsg.address1}
+          size='small'
+          onChange={setAttrOnChange}
+        />
+        <TextField
+          error={props.errorMsg.address2 ? true : null}
+          id="address2"
+          label="Address Line2"
+          value={props.employee.address2}
+          helperText={props.errorMsg.address2}
+          size='small'
+          onChange={setAttrOnChange}
+        />
+      </Grid>
+      <Grid item xs={12} margin={1} display='flex' justifyContent='space-evenly'>
+        <TextField
+          error={props.errorMsg.city ? true : null}
+          id="city"
+          label="City"
+          value={props.employee.city}
+          helperText={props.errorMsg.city}
+          size='small'
+          onChange={setAttrOnChange}
+        />
+        <TextField
+          error={props.errorMsg.state ? true : null}
+          id="state"
+          label="State"
+          value={props.employee.state}
+          helperText={props.errorMsg.state}
+          size='small'
+          onChange={setAttrOnChange}
+        />
+      </Grid>
+      <Grid item xs={12} margin={1} display='flex' justifyContent='center'>
+        <TextField
+          error={props.errorMsg.zip ? true : null}
+          id="zip"
+          label="zipcode"
+          value={props.employee.zip}
+          helperText={props.errorMsg.zip}
+          size='small'
+          onChange={setAttrOnChange}
+        />
+      </Grid>
+      <Grid item xs={12} margin={1} display='flex' justifyContent='center'>
+        <TextField
+          error={props.errorMsg.mob_no ? true : null}
+          id="mob_no"
+          label="Contact No"
+          value={props.employee.mob_no}
+          helperText={props.errorMsg.mob_no}
           size='small'
           onChange={setAttrOnChange}
         />
