@@ -4,7 +4,6 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 function DisplayComponent(props) {
-  const [open, setOpen] = React.useState(false);
   const [cellEditMode, setEditCellParams] = useState({
     editMode: false,
     editEmployeeId: null,
@@ -108,152 +107,7 @@ function DisplayComponent(props) {
       <TableBody>
         {
           Object.keys(props.employees).map((id) =>
-            <>
-              <TableRow
-                key={props.employees[id].id}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell>
-                  <IconButton
-                    aria-label="expand row"
-                    size="small"
-                    onClick={() => setOpen(!open)}
-                  >
-                    {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                  </IconButton>
-                </TableCell>
-                <TableCell
-                  id={props.employees[id].id}
-                  name='id'
-                  align="right"
-                  onDoubleClick={editCell}
-                  children={
-                    (cellEditMode.editMode && (cellEditMode.editEmployeePropName === 'id')) ?
-                      <TextField
-                        value={cellEditMode.editValue}
-                        onChange={changeCellValue}
-                        onBlur={updateValue}
-                      /> :
-                      props.employees[id].id
-                  }
-                />
-                <TableCell
-                  id={props.employees[id].id}
-                  name='name'
-                  align="right"
-                  onDoubleClick={editCell}
-                  children={
-                    (cellEditMode.editMode && (cellEditMode.editEmployeePropName === 'name')) ?
-                      <TextField
-                        value={cellEditMode.editValue}
-                        onChange={changeCellValue}
-                        onBlur={updateValue}
-                      /> :
-                      props.employees[id].name
-                  }
-                />
-                <TableCell
-                  id={props.employees[id].id}
-                  name='salary'
-                  align="right"
-                  onDoubleClick={editCell}
-                  children={
-                    (cellEditMode.editMode && (cellEditMode.editEmployeePropName === 'salary')) ?
-                      <TextField
-                        value={cellEditMode.editValue}
-                        onChange={changeCellValue}
-                        onBlur={updateValue}
-                      /> :
-                      props.employees[id].salary
-                  }
-                />
-                <TableCell align="center">
-                  <Button id={props.employees[id].id} variant="contained" color="secondary" size='small' onClick={onEdit} color="primary" aria-label="add to shopping cart">
-                    EDIT
-                  </Button>
-                  <Button id={props.employees[id].id} variant="contained" color="error" size='small' onClick={onDelete} color="primary" aria-label="add to shopping cart">
-                    DELETE
-                  </Button>
-                </TableCell>
-              </TableRow>
-              <TableRow key={`${props.employees[id].id}_collapse`}>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                  <Collapse in={open} timeout="auto" unmountOnExit>
-                    <Box sx={{ margin: 1 }}>
-                      <Table size="small" aria-label="purchases">
-                        <TableRow>
-                          <TableCell children='Address' />
-                          <TableCell
-                            id={props.employees[id].id}
-                            name='address'
-                            align="right"
-                            onDoubleClick={editCell}
-                            children={
-                              (cellEditMode.editMode && (cellEditMode.editEmployeePropName === 'address')) ?
-                                <>
-                                  <TextField
-                                    name="address1"
-                                    label="Address1"
-                                    value={cellEditMode.address1}
-                                    onChange={changeCellValue}
-                                    onBlur={updateValue}
-                                  />
-                                  <TextField
-                                    name="address2"
-                                    label="Address2"
-                                    value={cellEditMode.address2}
-                                    onChange={changeCellValue}
-                                    onBlur={updateValue}
-                                  />
-                                  <TextField
-                                    name="city"
-                                    label="City"
-                                    value={cellEditMode.city}
-                                    onChange={changeCellValue}
-                                    onBlur={updateValue}
-                                  />
-                                  <TextField
-                                    name="state"
-                                    label="State"
-                                    value={cellEditMode.state}
-                                    onChange={changeCellValue}
-                                    onBlur={updateValue}
-                                  />
-                                  <TextField
-                                    name="zip"
-                                    label="Zipcode"
-                                    value={cellEditMode.zip}
-                                    onChange={changeCellValue}
-                                    onBlur={updateValue}
-                                  />
-                                </> :
-                                getAddress(props.employees[id])
-                            }
-                          />
-                        </TableRow>
-                        <TableRow>
-                          <TableCell children='Contact No' />
-                          <TableCell
-                            id={props.employees[id].id}
-                            name='mob_no'
-                            align="right"
-                            onDoubleClick={editCell}
-                            children={
-                              (cellEditMode.editMode && (cellEditMode.editEmployeePropName === 'mob_no')) ?
-                                <TextField
-                                  value={cellEditMode.editValue}
-                                  onChange={changeCellValue}
-                                  onBlur={updateValue}
-                                /> :
-                                props.employees[id].mob_no}
-                          />
-                        </TableRow>
-                      </Table>
-                    </Box>
-                  </Collapse>
-                </TableCell>
-              </TableRow>
-            </>
+            <Rows key={id} id={id} employee={props.employees[id]} />
           )
         }
       </TableBody>
@@ -263,6 +117,133 @@ function DisplayComponent(props) {
       No Data to Display
     </Typography>
   );
+
+  function Rows(props) {
+    const [open, setOpen] = React.useState(false);
+    return <>
+      <TableRow
+        key={props.employee.id}
+        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+      >
+        <TableCell>
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
+        <TableCell
+          id={props.employee.id}
+          name='id'
+          align="right"
+          onDoubleClick={editCell}
+          children={(cellEditMode.editMode && (cellEditMode.editEmployeePropName === 'id')) ?
+            <TextField
+              value={cellEditMode.editValue}
+              onChange={changeCellValue}
+              onBlur={updateValue} /> :
+            props.employee.id} />
+        <TableCell
+          id={props.employee.id}
+          name='name'
+          align="right"
+          onDoubleClick={editCell}
+          children={(cellEditMode.editMode && (cellEditMode.editEmployeePropName === 'name')) ?
+            <TextField
+              value={cellEditMode.editValue}
+              onChange={changeCellValue}
+              onBlur={updateValue} /> :
+            props.employee.name} />
+        <TableCell
+          id={props.employee.id}
+          name='salary'
+          align="right"
+          onDoubleClick={editCell}
+          children={(cellEditMode.editMode && (cellEditMode.editEmployeePropName === 'salary')) ?
+            <TextField
+              value={cellEditMode.editValue}
+              onChange={changeCellValue}
+              onBlur={updateValue} /> :
+            props.employee.salary} />
+        <TableCell align="center">
+          <Button id={props.employee.id} variant="contained" color="secondary" size='small' onClick={onEdit} color="primary" aria-label="add to shopping cart">
+            EDIT
+          </Button>
+          <Button id={props.employee.id} variant="contained" color="error" size='small' onClick={onDelete} color="primary" aria-label="add to shopping cart">
+            DELETE
+          </Button>
+        </TableCell>
+      </TableRow>
+      <TableRow key={`${props.employee.id}_collapse`}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box sx={{ margin: 1 }}>
+              <Table size="small">
+                <TableRow>
+                  <TableCell children='Address' />
+                  <TableCell
+                    id={props.employee.id}
+                    name='address'
+                    align="right"
+                    onDoubleClick={editCell}
+                    children={(cellEditMode.editMode && (cellEditMode.editEmployeePropName === 'address')) ?
+                      <>
+                        <TextField
+                          name="address1"
+                          label="Address1"
+                          value={cellEditMode.address1}
+                          onChange={changeCellValue}
+                          onBlur={updateValue} />
+                        <TextField
+                          name="address2"
+                          label="Address2"
+                          value={cellEditMode.address2}
+                          onChange={changeCellValue}
+                          onBlur={updateValue} />
+                        <TextField
+                          name="city"
+                          label="City"
+                          value={cellEditMode.city}
+                          onChange={changeCellValue}
+                          onBlur={updateValue} />
+                        <TextField
+                          name="state"
+                          label="State"
+                          value={cellEditMode.state}
+                          onChange={changeCellValue}
+                          onBlur={updateValue} />
+                        <TextField
+                          name="zip"
+                          label="Zipcode"
+                          value={cellEditMode.zip}
+                          onChange={changeCellValue}
+                          onBlur={updateValue} />
+                      </> :
+                      getAddress(props.employee)} />
+                </TableRow>
+                <TableRow>
+                  <TableCell children='Contact No' />
+                  <TableCell
+                    id={props.employee.id}
+                    name='mob_no'
+                    align="right"
+                    onDoubleClick={editCell}
+                    children={(cellEditMode.editMode && (cellEditMode.editEmployeePropName === 'mob_no')) ?
+                      <TextField
+                        value={cellEditMode.editValue}
+                        onChange={changeCellValue}
+                        onBlur={updateValue} /> :
+                      props.employee.mob_no} />
+                </TableRow>
+              </Table>
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </>;
+  }
 }
 
 export default DisplayComponent;
