@@ -16,7 +16,17 @@ function App() {
   const [editEmployeeId, setEditEmpId] = useState(null);
   const [employee, setEmployee] = useState({ id: '', name: '', salary: '', address1: '', address2: '', city: '', state: '', zip: '', mob_no: '' });
   const [errorMsg, setErrorMsg] = useState({ id: '', name: '', salary: '', address1: '', address2: '', city: '', state: '', zip: '', mob_no: '' });
-
+  const [cellEditMode, setEditCellParams] = useState({
+    editMode: false,
+    editEmployeeId: null,
+    editEmployeePropName: null,
+    editValue: null,
+    address1: null,
+    address2: null,
+    city: null,
+    state: null,
+    zip: null
+  });
   function onSubmit(employee) {
     if (!editEmployeeId) {
       let newEmployee = Object.assign({}, employees, {
@@ -88,6 +98,8 @@ function App() {
           onDelete={deleteEmployee}
           onEdit={editEmployee}
           addEmployee={manageEmployee}
+          cellEditMode={cellEditMode}
+          setEditCellParams={setEditCellParams}
         />
       </TableContainer>
     </>
