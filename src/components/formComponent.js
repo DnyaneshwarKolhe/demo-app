@@ -2,11 +2,10 @@ import { Box, Button, Grid, Stack, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 function FormComponent(props) {
   function addEmployee(e) {
-    let isEmployeeExist = true;
     if (Object.keys(props.employees).find((element) => element == props.employee.id)) {
       if ((!props.editEmployeeId) || (props.editEmployeeId != props.employee.id)) {
-        isEmployeeExist = false;
         props.setErrorMsg({ ...props.errorMsg, id: `Employee with id ${props.employee.id} already exist` });
+        return;
       }
     }
     //Validating that all fields should contains values
@@ -22,7 +21,7 @@ function FormComponent(props) {
       if (!props.employee.zip) newErrorMsg.zip = "*Required";
       if (!props.employee.mob_no) newErrorMsg.mob_no = "*Required";
       props.setErrorMsg(newErrorMsg);
-    } else { //if (isEmployeeExist) 
+    } else {
       props.onSubmit(
         {
           id: props.employee.id,
