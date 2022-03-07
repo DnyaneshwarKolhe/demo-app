@@ -142,7 +142,6 @@ function App() {
             justifySelf: "center",
             justifyItems: "center",
             alignItems: "center",
-            bgcolor: "text.secondary",
             display: 'flex'
           }}
           component={Paper}

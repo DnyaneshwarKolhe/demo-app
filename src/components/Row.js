@@ -1,21 +1,10 @@
-import {
-  Box,
-  Button,
-  Collapse,
-  IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Collapse, IconButton, Table, TableBody, TableCell, TableRow, TextField, Typography }
+  from "@mui/material";
 import React, { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 function Rows(props) {
   const [open, setOpen] = useState(false);
-
   function getAddress(emp) {
     let address = "";
     if (emp.address1) address = `${emp.address1}`;
@@ -25,11 +14,26 @@ function Rows(props) {
     if (emp.zip) address = `${address}, ${emp.zip}`;
     return address;
   }
-
-  function updateValue(e) {
-    if (!props.cellEditMode.editValue) {
+  function validateData() {
+    if (props.cellEditMode.editEmployeePropName === "address") {
+      if (
+        !(
+          props.cellEditMode.address1 &&
+          props.cellEditMode.address2 &&
+          props.cellEditMode.city &&
+          props.cellEditMode.state &&
+          props.cellEditMode.zip
+        )
+      ) {
+        props.setEditCellParams({
+          ...props.cellEditMode,
+          errorMsg: "*Required",
+        });
+        return true;
+      }
+    } else if (!props.cellEditMode.editValue) {
       props.setEditCellParams({ ...props.cellEditMode, errorMsg: "*Required" });
-      return;
+      return true;
     }
     if (props.cellEditMode.editEmployeePropName === "id") {
       if (
@@ -42,7 +46,7 @@ function Rows(props) {
             ...props.cellEditMode,
             errorMsg: `Employee with id ${props.cellEditMode.editValue} already exist`,
           });
-          return;
+          return true;
         }
       }
     }
@@ -52,14 +56,20 @@ function Rows(props) {
           ...props.cellEditMode,
           errorMsg: "Invalid! Shouldn't contains charactor",
         });
-        return;
+        return true;
       } else if (props.cellEditMode.editValue.trim().length !== 10) {
         props.setEditCellParams({
           ...props.cellEditMode,
           errorMsg: "Invalid! No should be 10 digit only",
         });
-        return;
+        return true;
       }
+    }
+    return false;
+  }
+  function updateValue(e) {
+    if (validateData()) {
+      return false;
     }
     if (props.cellEditMode.editEmployeePropName !== "address") {
       if (props.cellEditMode.editEmployeePropName !== "id") {
@@ -71,7 +81,9 @@ function Rows(props) {
               props.cellEditMode.editValue,
           },
         });
-      } else if (props.cellEditMode.editEmployeeId !== props.cellEditMode.editValue) {
+      } else if (
+        props.cellEditMode.editEmployeeId !== props.cellEditMode.editValue
+      ) {
         let deletedEmployee = {
           ...props.employees,
           [props.cellEditMode.editValue]: {
@@ -208,7 +220,7 @@ function Rows(props) {
           }
         />
         <TableCell
-          align="right"
+          align="left"
           children={
             props.cellEditMode.editMode &&
               props.cellEditMode.editEmployeePropName === "name" &&
@@ -302,7 +314,10 @@ function Rows(props) {
                                 !props.cellEditMode.address1 &&
                                 props.cellEditMode.editMode
                               }
-                              helperText={props.cellEditMode.errorMsg}
+                              helperText={
+                                !props.cellEditMode.address1 &&
+                                props.cellEditMode.errorMsg
+                              }
                               name="address1"
                               label="Address1"
                               value={props.cellEditMode.address1}
@@ -315,7 +330,10 @@ function Rows(props) {
                                 !props.cellEditMode.address2 &&
                                 props.cellEditMode.editMode
                               }
-                              helperText={props.cellEditMode.errorMsg}
+                              helperText={
+                                !props.cellEditMode.address2 &&
+                                props.cellEditMode.errorMsg
+                              }
                               name="address2"
                               label="Address2"
                               value={props.cellEditMode.address2}
@@ -328,7 +346,10 @@ function Rows(props) {
                                 !props.cellEditMode.city &&
                                 props.cellEditMode.editMode
                               }
-                              helperText={props.cellEditMode.errorMsg}
+                              helperText={
+                                !props.cellEditMode.city &&
+                                props.cellEditMode.errorMsg
+                              }
                               name="city"
                               label="City"
                               value={props.cellEditMode.city}
@@ -341,7 +362,10 @@ function Rows(props) {
                                 !props.cellEditMode.state &&
                                 props.cellEditMode.editMode
                               }
-                              helperText={props.cellEditMode.errorMsg}
+                              helperText={
+                                !props.cellEditMode.state &&
+                                props.cellEditMode.errorMsg
+                              }
                               name="state"
                               label="State"
                               value={props.cellEditMode.state}
@@ -354,7 +378,10 @@ function Rows(props) {
                                 !props.cellEditMode.zip &&
                                 props.cellEditMode.editMode
                               }
-                              helperText={props.cellEditMode.errorMsg}
+                              helperText={
+                                !props.cellEditMode.zip &&
+                                props.cellEditMode.errorMsg
+                              }
                               name="zip"
                               label="Zipcode"
                               value={props.cellEditMode.zip}
