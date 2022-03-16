@@ -4,7 +4,7 @@ import Rows from "./Row";
 
 function DisplayComponent(props) {
   return Object.keys(props.employees).length ? (
-    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+    <Table sx={{ minWidth: 650, alignSelf: 'flex-start' }} aria-label="simple table">
       <TableHead>
         <TableRow>
           <TableCell />
@@ -33,7 +33,7 @@ function DisplayComponent(props) {
       </TableBody>
     </Table >
   ) : (
-    <Typography variant='h4' component="div" sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }} >
+    <Typography variant='h4' component="div" sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignSelf: 'center' }} >
       No Data to Display
     </Typography>
   );
